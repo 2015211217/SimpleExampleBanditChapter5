@@ -12,9 +12,11 @@
 		9974C53829F2C89E000B20C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9974C53729F2C89E000B20C1 /* Assets.xcassets */; };
 		9974C53B29F2C89E000B20C1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9974C53929F2C89E000B20C1 /* Main.storyboard */; };
 		9974C53E29F2C89E000B20C1 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9974C53D29F2C89E000B20C1 /* main.m */; };
+		E7CD0B4605ADAA4E583DB959 /* Pods_BanditBookChapter5Show.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCDE14930ED72DA57621471C /* Pods_BanditBookChapter5Show.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0C52C9EA464C27033F0EE817 /* Pods-BanditBookChapter5Show.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BanditBookChapter5Show.release.xcconfig"; path = "Target Support Files/Pods-BanditBookChapter5Show/Pods-BanditBookChapter5Show.release.xcconfig"; sourceTree = "<group>"; };
 		9974C52E29F2C89A000B20C1 /* BanditBookChapter5Show.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BanditBookChapter5Show.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9974C53129F2C89A000B20C1 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		9974C53229F2C89A000B20C1 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -25,6 +27,8 @@
 		9974C53C29F2C89E000B20C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9974C53D29F2C89E000B20C1 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9974C53F29F2C89E000B20C1 /* BanditBookChapter5Show.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BanditBookChapter5Show.entitlements; sourceTree = "<group>"; };
+		B8FC66076E63CB0612E3C169 /* Pods-BanditBookChapter5Show.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BanditBookChapter5Show.debug.xcconfig"; path = "Target Support Files/Pods-BanditBookChapter5Show/Pods-BanditBookChapter5Show.debug.xcconfig"; sourceTree = "<group>"; };
+		BCDE14930ED72DA57621471C /* Pods_BanditBookChapter5Show.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BanditBookChapter5Show.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,17 +36,38 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7CD0B4605ADAA4E583DB959 /* Pods_BanditBookChapter5Show.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4DE759D6F52BA2BA832A3DF7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BCDE14930ED72DA57621471C /* Pods_BanditBookChapter5Show.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5B8648DFF5963DD34800FACB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B8FC66076E63CB0612E3C169 /* Pods-BanditBookChapter5Show.debug.xcconfig */,
+				0C52C9EA464C27033F0EE817 /* Pods-BanditBookChapter5Show.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		9974C52529F2C89A000B20C1 = {
 			isa = PBXGroup;
 			children = (
 				9974C53029F2C89A000B20C1 /* BanditBookChapter5Show */,
 				9974C52F29F2C89A000B20C1 /* Products */,
+				5B8648DFF5963DD34800FACB /* Pods */,
+				4DE759D6F52BA2BA832A3DF7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,9 +102,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9974C54229F2C89E000B20C1 /* Build configuration list for PBXNativeTarget "BanditBookChapter5Show" */;
 			buildPhases = (
+				E091F64AAE2E9323BF51D373 /* [CP] Check Pods Manifest.lock */,
 				9974C52A29F2C89A000B20C1 /* Sources */,
 				9974C52B29F2C89A000B20C1 /* Frameworks */,
 				9974C52C29F2C89A000B20C1 /* Resources */,
+				8DF9FE17535436E1FA6BF5F5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -132,6 +159,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8DF9FE17535436E1FA6BF5F5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BanditBookChapter5Show/Pods-BanditBookChapter5Show-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BanditBookChapter5Show/Pods-BanditBookChapter5Show-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BanditBookChapter5Show/Pods-BanditBookChapter5Show-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E091F64AAE2E9323BF51D373 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BanditBookChapter5Show-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9974C52A29F2C89A000B20C1 /* Sources */ = {
@@ -271,6 +340,7 @@
 		};
 		9974C54329F2C89E000B20C1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B8FC66076E63CB0612E3C169 /* Pods-BanditBookChapter5Show.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -289,6 +359,7 @@
 		};
 		9974C54429F2C89E000B20C1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0C52C9EA464C27033F0EE817 /* Pods-BanditBookChapter5Show.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
