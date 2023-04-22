@@ -6,27 +6,30 @@
 //
 
 #import "ViewController.h"
-
 #import <Masonry.h>
 
 @implementation ViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSTextField *labelTitle = [NSTextField labelWithString:@"This version only support uniform distribution"];
-    NSTextField *labelMu = [NSTextField labelWithString:@"Expectation"];
-    NSTextField *labelDiscription = [NSTextField labelWithString:@"Real distribution"];
+    NSTextField *labelMu = [NSTextField labelWithString:@"Epsilon"];
+    NSTextField *labelDiscription = [NSTextField labelWithString:@"Probability"];
     NSTextField *labelAEsti = [NSTextField labelWithString:@"a"];
     NSTextField *labelBEsti = [NSTextField labelWithString:@"b"];
     NSTextField *labelNEsti = [NSTextField labelWithString:@"n"];
     NSTextField *labelDiscriptionEsti = [NSTextField labelWithString:@"Estimation"];
-    NSTextField *labelResult = [NSTextField labelWithString:@"Result"];
-    NSTextField *showResult = [[NSTextField alloc] init];
-    
-    NSTextView *TextMu = [[NSTextView alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
-    NSTextView *TextA = [[NSTextView alloc] initWithFrame:CGRectMake(10, 0, 60, 30)];
-    NSTextView *TextB = [[NSTextView alloc] initWithFrame:CGRectMake(0, 10, 60, 30)];
-    NSTextView *TextN = [[NSTextView alloc] initWithFrame:CGRectMake(20, 0, 60, 30)];
+    NSTextField *labelResultLeft = [NSTextField labelWithString:@"Left side"];
+    NSTextField *labelResultRight = [NSTextField labelWithString:@"right side"];
+
+    _showResultLeft = [[NSTextField alloc] init];
+    _showResultRight = [[NSTextField alloc] init];
+    _TextMu = [[NSTextView alloc] init];
+    _TextA = [[NSTextView alloc] init];
+    _TextB = [[NSTextView alloc] init];
+    _TextN = [[NSTextView alloc] init];
+
     
     
     [self.view addSubview:labelTitle];
@@ -36,32 +39,39 @@
     [self.view addSubview:labelBEsti];
     [self.view addSubview:labelNEsti];
     [self.view addSubview:labelDiscriptionEsti];
-    [self.view addSubview:TextA];
-    [self.view addSubview:TextB];
-    [self.view addSubview:TextN];
-    [self.view addSubview:TextMu];
-    [self.view addSubview:labelResult];
-    [self.view addSubview:showResult];
+    [self.view addSubview:_TextA];
+    [self.view addSubview:_TextB];
+    [self.view addSubview:_TextN];
+    [self.view addSubview:_TextMu];
+    [self.view addSubview:labelResultLeft];
+    [self.view addSubview:labelResultRight];
+
+    [self.view addSubview:_showResultLeft];
+    [self.view addSubview:_showResultRight];
+
     
     
     [labelTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view);
         make.top.equalTo(self.view.mas_top).offset(20);
     }];
+    
     [labelDiscription mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left).offset(30);
         make.top.equalTo(labelTitle.mas_bottom).offset(20);
     }];
+    
     [labelMu mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(labelDiscription);
         make.top.equalTo(labelDiscription.mas_bottom).offset(40);
     }];
-    [TextMu mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_TextMu mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(labelMu);
         make.left.equalTo(labelMu.mas_right).offset(10);
         make.width.equalTo(labelMu.mas_width);
         make.height.equalTo(labelMu.mas_height);
     }];
+    
     [labelDiscriptionEsti mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(labelDiscription);
         make.left.equalTo(self.view.mas_centerX).offset(50);
@@ -78,28 +88,29 @@
         make.left.equalTo(labelDiscriptionEsti);
         make.top.equalTo(labelBEsti.mas_bottom).offset(15);
     }];
-    [TextA mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_TextA mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(labelAEsti.mas_right).offset(10);
         make.centerY.equalTo(labelAEsti);
         make.width.equalTo(labelMu.mas_width);
         make.height.equalTo(labelMu.mas_height);
     }];
-    [TextB mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_TextB mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(labelBEsti.mas_right).offset(10);
         make.centerY.equalTo(labelBEsti);
         make.width.equalTo(labelMu.mas_width);
         make.height.equalTo(labelMu.mas_height);
     }];
-    [TextN mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_TextN mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(labelNEsti.mas_right).offset(10);
         make.centerY.equalTo(labelNEsti);
         make.width.equalTo(labelMu.mas_width);
         make.height.equalTo(labelMu.mas_height);
     }];
     
-    NSButton *decideButton = [[NSButton alloc] initWithFrame:CGRectMake(10, 10, 50, 30)];
+    NSButton *decideButton = [[NSButton alloc] init];
+    
     [self.view addSubview:decideButton];
-    decideButton.title = @"Check it!";
+//    decideButton.title = @"Check it!";
     [decideButton mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view);
         make.bottom.equalTo(labelNEsti.mas_bottom).offset(50);
@@ -107,16 +118,97 @@
         make.height.equalTo(labelMu.mas_height);
     }];
     
-    [labelResult mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.view);
+    [labelResultLeft mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(labelDiscription);
         make.top.equalTo(decideButton.mas_bottom).offset(20);
     }];
-    [showResult mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(labelResult);
-        make.top.equalTo(labelResult).offset(20);
+    
+    [labelResultRight mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(labelAEsti);
+        make.top.equalTo(decideButton.mas_bottom).offset(20);
     }];
     
+    [_showResultLeft mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(labelResultLeft);
+        make.top.equalTo(labelResultLeft).offset(20);
+    }];
     
+    [_showResultRight mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(labelResultRight);
+        make.top.equalTo(labelResultRight).offset(20);
+    }];
+    
+    [decideButton setTitle:@"Check!"];
+    [decideButton setTarget:self];
+    [decideButton setAction:@selector(Calculation:)];
+    
+}
+
+- (BOOL)isPureInt:(NSString *)string{
+    NSScanner *scan = [NSScanner scannerWithString:string];
+    int *num = NULL;
+    return [scan scanInt:num] && [scan isAtEnd];
+}
+
+- (BOOL)isPureFloat:(NSString *)string{
+    NSScanner *scan = [NSScanner scannerWithString:string];
+    float *num = NULL;
+    return [scan scanFloat:num] && [scan isAtEnd];
+}
+
+- (void)Calculation:(NSButton *) sender {
+    NSString *mu = _TextMu.string;
+    NSString *a = _TextA.string;
+    NSString *b = _TextB.string;
+    NSString *n = _TextN.string;
+    NSLog(@"%@", mu);
+    NSLog(@"%@", a);
+    NSLog(@"%@", b);
+    NSLog(@"%@", n);
+    
+    int muInt = mu.floatValue;
+    int AInt = a.intValue;
+    int BInt = b.intValue;
+    int NInt = n.intValue;
+    int ResultLeft = 0;
+    int ResultRight = 0;
+    
+    if([self isPureFloat:mu] && [self isPureInt:a] && [self isPureInt:b] && [self isPureInt:n]) {
+        if(AInt >= 0 && muInt >= 0 && BInt >= 0 && NInt >= 0) {
+            if (AInt <= BInt) {
+                ResultRight = exp((-2 * NInt * NInt *muInt * muInt)
+                                  / (NInt * (BInt - AInt)^2));
+                
+                
+            } else [self showWaringRelaAB:@"nothing"];
+            
+        } else [self showWaringRela:@"nothing"];
+    } else
+        [self showWaring:@"nothing"];
+}
+
+- (void)showWaring:(NSString *) msg {
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.alertStyle = NSAlertStyleCritical;
+    alert.messageText = @"Only integers are vaild!!";
+    [alert addButtonWithTitle:@"OK"];
+    [alert runModal];
+}
+
+- (void)showWaringRela:(NSString *) msg {
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.alertStyle = NSAlertStyleCritical;
+    alert.messageText = @"Only positive integers are valid!";
+    [alert addButtonWithTitle:@"OK"];
+    [alert runModal];
+}
+
+- (void)showWaringRelaAB:(NSString *) msg {
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.alertStyle = NSAlertStyleCritical;
+    alert.messageText = @"Please check: a ≤ b ?";
+    [alert addButtonWithTitle:@"OK"];
+    [alert runModal];
 }
 
 - (void)setRepresentedObject:(id)representedObject {

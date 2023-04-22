@@ -9,6 +9,13 @@
 
 @interface ViewController : NSViewController
 
+@property (nonatomic, strong) NSTextView *TextMu;
+@property (nonatomic, strong) NSTextView *TextA;
+@property (nonatomic, strong) NSTextView *TextB;
+@property (nonatomic, strong) NSTextView *TextN;
+@property (nonatomic, strong) NSTextField *showResultLeft;
+@property (nonatomic, strong) NSTextField *showResultRight;
+
 
 @end
 
