@@ -9,4 +9,5 @@ target 'BanditBookChapter5Show' do
   pod "Masonry"
   pod "AFNetworking"
   pod "JSONModel"
+# pod "GameplayKit"
 end

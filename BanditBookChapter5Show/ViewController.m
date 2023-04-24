@@ -7,6 +7,10 @@
 
 #import "ViewController.h"
 #import <Masonry.h>
+#import <GameplayKit/GameplayKit.h>
+#import <GameplayKit/GameplayKitBase.h>
+#import <GameplayKit/GKGameModel.h>
+
 
 @implementation ViewController
 
@@ -30,8 +34,8 @@
     _TextB = [[NSTextView alloc] init];
     _TextN = [[NSTextView alloc] init];
 
-    _showResultLeft.stringValue = @"wwwwwww";
-    _showResultRight.stringValue = @"wwwwwwww";
+    _showResultLeft.stringValue = @"";
+    _showResultRight.stringValue = @"";
     
     [self.view addSubview:labelTitle];
     [self.view addSubview:labelMu];
@@ -161,6 +165,19 @@
     return [scan scanFloat:num] && [scan isAtEnd];
 }
 
+- (BOOL)isRangeFloat:(NSString *)string{
+    NSScanner *scan = [NSScanner scannerWithString:string];
+    float *num = NULL;
+    if (![scan scanFloat:num] && [scan isAtEnd]){
+        return [scan scanFloat:num] && [scan isAtEnd];
+    } else {
+        float num = [string floatValue];
+        if (num >= 0 && num <= 1.0) return true;
+        else return false;
+    }
+    return true;
+}
+
 - (void)Calculation:(NSButton *) sender {
     NSString *mu = _TextMu.string;
     NSString *a = _TextA.string;
@@ -176,31 +193,48 @@
     float BInt = b.floatValue;
     int NInt = n.intValue;
     float ResultLeft = 0;
-    float ResultRight = 0;
+    float ResultRight ;
     
     if([self isPureFloat:mu] && [self isPureFloat:a] && [self isPureFloat:b] && [self isPureInt:n]) {
-        if(AInt >= 0 && muInt >= 0 && BInt >= 0 && NInt >= 0) {
-            if (AInt <= BInt) {
-//                ResultRight = exp((-2 * NInt * NInt *muInt * muInt)
-//                                  /(NInt * (BInt - AInt)^2));
-                
-                _showResultRight.stringValue = [NSString stringWithFormat:@"%f", ResultRight];
-                float tildeMu = 0;
-                float probabilityMu = 0;
-                float expectMu = (BInt - AInt) / 2;
-                for(int i = 0;i < NInt ; i++){
-                    tildeMu += [self getRandomFloat:AInt to:BInt];
-                }
-                tildeMu = tildeMu / NInt;
-                
-                _showResultLeft.stringValue = [NSString stringWithFormat:@"%f", probabilityMu];
-                NSLog(@"%@", _showResultLeft.stringValue);
-                self.view.needsDisplay = true;
-                
+        if([self isRangeFloat:mu]) {
+        if(NInt >= 0 && BInt >= 0) {
+            float delta = 0.01;
+            float NFloat = NInt;
+            int Interation = NInt;
+        
+            ResultRight = exp((-2) * ( (Interation * Interation * muInt * muInt)
+                              /(NFloat * (muInt + delta * Interation) * (muInt + delta * Interation))));
 
-            } else [self showWaringRelaAB:@"nothing"];
+            ResultRight *= 2;
+//            float tildeMu = 0;
+//            for(int i = 0;i < NInt ; i++){
+//                tildeMu += [self getRandomFloat:AInt to:BInt];
+//            }
+//            tildeMu = tildeMu / NInt;
             
+//            float absDifferTildeMuMu = tildeMu - AInt > 0 ? tildeMu-AInt : AInt - tildeMu;
+            float X = muInt + AInt;
+            for (int i = 0;i < Interation; i++) {
+                float changbianjiadibian = 0;
+                changbianjiadibian += (1.0 / (sqrt(BInt * 2.0 * M_PI))) * exp(-1.0 * ((X - AInt)*(X - AInt)/2.0*BInt));
+                X = X + delta;
+                changbianjiadibian += (1.0 / (sqrt(BInt * 2.0 * M_PI))) * exp(-1.0 * ((X - AInt)*(X - AInt)/2.0*BInt));
+                ResultLeft += changbianjiadibian * delta / 2.0;
+            }
+            ResultLeft *= 2;
+            ResultLeft = 1 - ResultLeft;
+            
+            _showResultLeft.stringValue = [NSString stringWithFormat:@"%f", ResultLeft];
+            
+            _showResultRight.stringValue = [NSString stringWithFormat:@"%f", ResultRight];
+            
+            NSLog(@"%@", _showResultLeft.stringValue);
+            NSLog(@"%@", _showResultRight.stringValue);
+
+            self.view.needsDisplay = true;
+                
         } else [self showWaringRela:@"nothing"];
+        } else [self showWaringRelaAB:@"nothing"];
     } else
         [self showWaring:@"nothing"];
 }
@@ -208,7 +242,7 @@
 - (void)showWaring:(NSString *) msg {
     NSAlert *alert = [[NSAlert alloc] init];
     alert.alertStyle = NSAlertStyleCritical;
-    alert.messageText = @"Only integers are vaild!!";
+    alert.messageText = @"Invaild input!!";
     [alert addButtonWithTitle:@"OK"];
     [alert runModal];
 }
@@ -216,7 +250,7 @@
 - (void)showWaringRela:(NSString *) msg {
     NSAlert *alert = [[NSAlert alloc] init];
     alert.alertStyle = NSAlertStyleCritical;
-    alert.messageText = @"Only positive integers are valid!";
+    alert.messageText = @"Require positive n and sigma^2!";
     [alert addButtonWithTitle:@"OK"];
     [alert runModal];
 }
@@ -224,7 +258,7 @@
 - (void)showWaringRelaAB:(NSString *) msg {
     NSAlert *alert = [[NSAlert alloc] init];
     alert.alertStyle = NSAlertStyleCritical;
-    alert.messageText = @"Please check: a ≤ b ?";
+    alert.messageText = @"epsilon should be [0, 1]!";
     [alert addButtonWithTitle:@"OK"];
     [alert runModal];
 }
@@ -234,8 +268,14 @@
     // Update the view, if already loaded.
 }
 
-- (float)getRandomFloat: (int)from to :(int) to {
-    return  from + arc4random() % (to - from + 1);
+- (float)getRandomFloat: (float)mu to :(float) sigmaSqure {
+    
+    float u =(float)(random() %1000 + 1)/1000;
+    float v =(float)(random() %1000 + 1)/1000;
+    float x = sqrt(-2*log(u))*cos(2* M_PI *v);
+    float y = x * sqrt(sigmaSqure) + mu;
+    return y;
+    
 }
 
 
