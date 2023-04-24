@@ -10,14 +10,14 @@
 
 @implementation ViewController
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSTextField *labelTitle = [NSTextField labelWithString:@"This version only support uniform distribution"];
+    
+    NSTextField *labelTitle = [NSTextField labelWithString:@"This version only support gaussian distribution"];
     NSTextField *labelMu = [NSTextField labelWithString:@"Epsilon"];
     NSTextField *labelDiscription = [NSTextField labelWithString:@"Probability"];
-    NSTextField *labelAEsti = [NSTextField labelWithString:@"a"];
-    NSTextField *labelBEsti = [NSTextField labelWithString:@"b"];
+    NSTextField *labelAEsti = [NSTextField labelWithString:@"mu"];
+    NSTextField *labelBEsti = [NSTextField labelWithString:@"sigma^2"];
     NSTextField *labelNEsti = [NSTextField labelWithString:@"n"];
     NSTextField *labelDiscriptionEsti = [NSTextField labelWithString:@"Estimation"];
     NSTextField *labelResultLeft = [NSTextField labelWithString:@"Left side"];
@@ -30,7 +30,8 @@
     _TextB = [[NSTextView alloc] init];
     _TextN = [[NSTextView alloc] init];
 
-    
+    _showResultLeft.stringValue = @"wwwwwww";
+    _showResultRight.stringValue = @"wwwwwwww";
     
     [self.view addSubview:labelTitle];
     [self.view addSubview:labelMu];
@@ -89,7 +90,7 @@
         make.top.equalTo(labelBEsti.mas_bottom).offset(15);
     }];
     [_TextA mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(labelAEsti.mas_right).offset(10);
+        make.left.equalTo(labelBEsti.mas_right).offset(10);
         make.centerY.equalTo(labelAEsti);
         make.width.equalTo(labelMu.mas_width);
         make.height.equalTo(labelMu.mas_height);
@@ -101,7 +102,7 @@
         make.height.equalTo(labelMu.mas_height);
     }];
     [_TextN mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(labelNEsti.mas_right).offset(10);
+        make.left.equalTo(labelBEsti.mas_right).offset(10);
         make.centerY.equalTo(labelNEsti);
         make.width.equalTo(labelMu.mas_width);
         make.height.equalTo(labelMu.mas_height);
@@ -129,13 +130,17 @@
     }];
     
     [_showResultLeft mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(labelResultLeft);
-        make.top.equalTo(labelResultLeft).offset(20);
+        make.centerX.equalTo(labelResultLeft);
+        make.top.equalTo(labelResultLeft.mas_bottom).offset(20);
+        make.width.equalTo(labelMu.mas_width);
+        make.height.equalTo(labelMu.mas_height);
     }];
     
     [_showResultRight mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(labelResultRight);
-        make.top.equalTo(labelResultRight).offset(20);
+        make.centerX.equalTo(labelResultRight);
+        make.top.equalTo(labelResultRight.mas_bottom).offset(20);
+        make.width.equalTo(labelMu.mas_width);
+        make.height.equalTo(labelMu.mas_height);
     }];
     
     [decideButton setTitle:@"Check!"];
@@ -166,20 +171,33 @@
     NSLog(@"%@", b);
     NSLog(@"%@", n);
     
-    int muInt = mu.floatValue;
-    int AInt = a.intValue;
-    int BInt = b.intValue;
+    float muInt = mu.floatValue;
+    float AInt = a.floatValue;
+    float BInt = b.floatValue;
     int NInt = n.intValue;
-    int ResultLeft = 0;
-    int ResultRight = 0;
+    float ResultLeft = 0;
+    float ResultRight = 0;
     
-    if([self isPureFloat:mu] && [self isPureInt:a] && [self isPureInt:b] && [self isPureInt:n]) {
+    if([self isPureFloat:mu] && [self isPureFloat:a] && [self isPureFloat:b] && [self isPureInt:n]) {
         if(AInt >= 0 && muInt >= 0 && BInt >= 0 && NInt >= 0) {
             if (AInt <= BInt) {
-                ResultRight = exp((-2 * NInt * NInt *muInt * muInt)
-                                  / (NInt * (BInt - AInt)^2));
+//                ResultRight = exp((-2 * NInt * NInt *muInt * muInt)
+//                                  /(NInt * (BInt - AInt)^2));
                 
+                _showResultRight.stringValue = [NSString stringWithFormat:@"%f", ResultRight];
+                float tildeMu = 0;
+                float probabilityMu = 0;
+                float expectMu = (BInt - AInt) / 2;
+                for(int i = 0;i < NInt ; i++){
+                    tildeMu += [self getRandomFloat:AInt to:BInt];
+                }
+                tildeMu = tildeMu / NInt;
                 
+                _showResultLeft.stringValue = [NSString stringWithFormat:@"%f", probabilityMu];
+                NSLog(@"%@", _showResultLeft.stringValue);
+                self.view.needsDisplay = true;
+                
+
             } else [self showWaringRelaAB:@"nothing"];
             
         } else [self showWaringRela:@"nothing"];
@@ -213,8 +231,11 @@
 
 - (void)setRepresentedObject:(id)representedObject {
     [super setRepresentedObject:representedObject];
-
     // Update the view, if already loaded.
+}
+
+- (float)getRandomFloat: (int)from to :(int) to {
+    return  from + arc4random() % (to - from + 1);
 }
 
 
