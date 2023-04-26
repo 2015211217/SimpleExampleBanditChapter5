@@ -193,7 +193,7 @@
     float BInt = b.floatValue;
     int NInt = n.intValue;
     float ResultLeft = 0;
-    float ResultRight ;
+    float ResultRight  ;
     
     if([self isPureFloat:mu] && [self isPureFloat:a] && [self isPureFloat:b] && [self isPureInt:n]) {
         if([self isRangeFloat:mu]) {
@@ -201,29 +201,24 @@
             float delta = 0.01;
             float NFloat = NInt;
             int Interation = NInt;
-        
             ResultRight = exp((-2) * ( (Interation * Interation * muInt * muInt)
-                              /(NFloat * (muInt + delta * Interation) * (muInt + delta * Interation))));
+                              /(NFloat * (2 * muInt + 2 * delta * Interation * 100 ) * (2 * muInt + 2 * delta * Interation * 1000))));
 
-            ResultRight *= 2;
-//            float tildeMu = 0;
-//            for(int i = 0;i < NInt ; i++){
-//                tildeMu += [self getRandomFloat:AInt to:BInt];
-//            }
-//            tildeMu = tildeMu / NInt;
-            
-//            float absDifferTildeMuMu = tildeMu - AInt > 0 ? tildeMu-AInt : AInt - tildeMu;
-            float X = muInt + AInt;
-            for (int i = 0;i < Interation; i++) {
-                float changbianjiadibian = 0;
-                changbianjiadibian += (1.0 / (sqrt(BInt * 2.0 * M_PI))) * exp(-1.0 * ((X - AInt)*(X - AInt)/2.0*BInt));
-                X = X + delta;
-                changbianjiadibian += (1.0 / (sqrt(BInt * 2.0 * M_PI))) * exp(-1.0 * ((X - AInt)*(X - AInt)/2.0*BInt));
-                ResultLeft += changbianjiadibian * delta / 2.0;
+            float tildeMu = 0;
+            for(int i = 0;i < NInt ; i++){
+                tildeMu += [self getRandomFloat:AInt to:BInt];
             }
-            ResultLeft *= 2;
-            ResultLeft = 1 - ResultLeft;
+            tildeMu = tildeMu / NInt;
             
+            float absDifferTildeMuMu = tildeMu - AInt > 0 ? tildeMu-AInt : AInt - tildeMu;
+            
+            float X = absDifferTildeMuMu  + AInt;
+            ResultLeft = 0.5 * erfcf(((muInt - X) / sqrt(BInt * 2))) * delta;
+            
+            ResultLeft *= 2;
+            
+            ResultLeft = 1 - ResultLeft;
+
             _showResultLeft.stringValue = [NSString stringWithFormat:@"%f", ResultLeft];
             
             _showResultRight.stringValue = [NSString stringWithFormat:@"%f", ResultRight];
